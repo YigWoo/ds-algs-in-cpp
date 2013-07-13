@@ -12,7 +12,7 @@ Trie::Node::~Node() {}
 /*     children[n] = child; */
 /*   else */
 /*     cout << "wrong index" << endl; */
-}
+/* } */
 /* vector<Trie::Node*> Trie::Node::getChildren() {return children;} */
 /* void Trie::Node::addChild(Node *child) {children.push_back(child);} */
 /* char Trie::Node::getChar() {return content;} */
@@ -34,7 +34,15 @@ Trie::Node::~Node() {}
 /* } */
 
 Trie::Trie() { root = new Node();}
-Trie::~Trie() {}
+Trie::~Trie() {
+    destory(root);
+}
+void Trie::destory(Node* x) {
+    for (int i = 0; i < R; i++)
+	if (x->children[i] != NULL)
+	    destory(x->children[i]);
+    delete x;
+}
 size_t Trie::size() {return size(root);}
 size_t Trie::size(const Node* x) {
     if (x == NULL) return 0;
@@ -68,13 +76,32 @@ Trie::Node* Trie::get(Node* x, const string& key, size_t d) const {
     if (d == key.size()) return x;
     char c = key[d];
     /* the next line is a little bit of hard coding */
+    /* some other lines in the code are similar */
     return get(x->children[c-'a'], key, d+1);
 }
-void remove(const string& key) {
+void Trie::remove(const string& key) {
     root = remove(root, key, 0);
 }
 Trie::Node* Trie::remove(Node* x, const string& key, size_t d) {
-    
+    if (x == NULL) return NULL;
+    if (d == key.size()) x->isKey = false;
+    else {
+	char c = key[d];
+	x->children[c-'a'] = remove(x->children[c-'a'], key, d+1);
+    }
+    /*   The following line is a tricky line,
+     * it ensures that if the node corresponds
+     * to the last character of a key, recursive
+     * deletion stops here, otherwise,  program
+     * check whether the node has non-NULL nodes,
+     * if not, it will remove current node.
+     */
+    if (x->isKey != false) return x;
+    for (int c = 0; c < R; c++)
+	if (x->children[c] != NULL)
+	    return x;
+    delete x;
+    return NULL;
 }
 string Trie::longestPrefixOf(string query) const {
 }
@@ -121,4 +148,17 @@ int main() {
 	cout << "trie contains sea" << endl;
     if (!trie.contains("shell"))
 	cout << "trie doesn't contains shell" << endl;
+    trie.remove("sea");
+    trie.remove("by");
+    trie.remove("sells");
+    trie.remove("she");
+    cout << "The size of the trie is: ";
+    cout << trie.size() << endl;
+    cout << trie.contains("shells") << endl;
+    cout << trie.contains("she") << endl;
+    trie.insert("she");
+    cout << trie.contains("she") << endl;
+    trie.remove("sh");
+    trie.remove("hah");
+    cout << trie.size() << endl;
 }

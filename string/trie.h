@@ -5,7 +5,6 @@ using namespace std;
 #ifndef TRIE_H
 #define TRIE_H
 
-
 class Trie {
   public:
     Trie();
@@ -43,5 +42,6 @@ class Trie {
     Trie::Node* put(Node* x, const string& key, size_t d);
     Trie::Node* get(Node* x, const string& key, size_t d) const;
     Trie::Node* remove(Node* x, const string& key, size_t d);
+    void destory(Node* x); 
 };
 #endif
