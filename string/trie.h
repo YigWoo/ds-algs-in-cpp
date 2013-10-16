@@ -40,8 +40,9 @@ class Trie {
   private:
     size_t size(const Node* x);
     Trie::Node* put(Node* x, const string& key, size_t d);
-    Trie::Node* get(Node* x, const string& key, size_t d) const;
+    const Trie::Node* get(Node* x, const string& key, size_t d) const;
     Trie::Node* remove(Node* x, const string& key, size_t d);
+    void collect(const Node* x, const string& key, vector<string>& q) const;
     void destory(Node* x); 
 };
 #endif

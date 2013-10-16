@@ -67,11 +67,12 @@ Trie::Node* Trie::put(Node* x, const string& key, size_t d) {
     return x;
 }
 bool Trie::contains(const string& key) const{
-    Node* x = get(root, key, 0);
+    /* const pointer as return type */
+    const Node* x = get(root, key, 0);
     if (x == NULL) return false;
     return x->isKey;
 }
-Trie::Node* Trie::get(Node* x, const string& key, size_t d) const {
+const Trie::Node* Trie::get(Node* x, const string& key, size_t d) const {
     if (x == NULL) return NULL;
     if (d == key.size()) return x;
     char c = key[d];
@@ -106,10 +107,21 @@ Trie::Node* Trie::remove(Node* x, const string& key, size_t d) {
 string Trie::longestPrefixOf(string query) const {
 }
 vector<string> Trie::keys() const {
+    return keysWithPrefix("");
 }
-vector<string> Trie::keysWithPrefix(const string& key) const {
+vector<string> Trie::keysWithPrefix(const string& prefix) const {
+    vector<string> q;
+    collect(get(root, prefix, 0), prefix, q);
+    return q;
 }
-
+void Trie::collect(const Node* x, const string& key, vector<string>& q) const {
+    if (x == NULL) return;
+    if (x->isKey == true) q.push_back(key);
+    for (int i = 0; i < R; i++) {
+	char c = (char) (i + 'a');
+	collect(x->children[i], key+c, q);
+    }
+}
 /* unit test */
 int main() {
   /* Trie::Node *root = new Trie::Node(); */
@@ -142,6 +154,12 @@ int main() {
     trie.insert("the");
     trie.insert("sea");
     trie.insert("shore");
+    vector<string> vs;
+    vs = trie.keys();
+    for (vector<string>::iterator it = vs.begin(); it != vs.end(); it++) {
+	cout << *it << " ";
+    }
+    cout << endl;
     cout << "The size of the trie is: ";
     cout << trie.size() << endl;
     if (trie.contains("sea"))
