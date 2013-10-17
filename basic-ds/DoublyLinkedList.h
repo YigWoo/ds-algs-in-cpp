@@ -56,12 +56,12 @@ class DoublyLinkedList {
         friend class DoublyLinkedList<Object>;
       public:
         iterator() {}
-        Object& operator* () {return const_iterator::retrieve();}
+        Object& operator* () {return this->retrieve();}
         const Object& operator* () const {
             return const_iterator::operator*();
         }
         iterator& operator++() {
-            const_iterator::current = const_iterator::current->next;
+            this->current = this->current->next;
             return *this;
         }
         iterator& operator++(int) {
@@ -70,7 +70,7 @@ class DoublyLinkedList {
             return old;
         }
         iterator& operator--() {
-            const_iterator::current = const_iterator::current->prev;
+            this->current = this->current->prev;
             return *this;
         }
         iterator& operator--(int) {
