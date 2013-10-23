@@ -154,7 +154,7 @@ class DoublyLinkedList {
     // watch out.
     int sz;
     Node *head;
-    Node *tail;
+v    Node *tail;
     void init() {
         sz = 0;
         head = new Node();

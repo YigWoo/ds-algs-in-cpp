@@ -1,5 +1,11 @@
+// The Trie data structure is written
+// according the Algorithms 4th by Robert Sedgewick
+// in chapter 5.2
+// Author: YigWoo
+
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 #ifndef TRIE_H
@@ -9,12 +15,14 @@ class Trie {
   public:
     Trie();
     ~Trie();
+    Trie(const Trie& rhs);
+    Trie& operator=(const Trie& rhs);
+    friend void swap(Trie& first, Trie& second);
     size_t size();
     bool isEmpty();
     bool contains(const string& key) const;
     void insert(const string& key);
     void remove(const string& key);
-    string longestPrefixOf(string query) const;
     vector<string> keys() const;
     vector<string> keysWithPrefix(const string& key) const;
   public:
