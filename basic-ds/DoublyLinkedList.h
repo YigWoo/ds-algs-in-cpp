@@ -1,6 +1,19 @@
 #ifndef _DOUBLY_LINKED_LIST_H
 #define _DOUBLY_LINKED_LIST_H
+#include <iostream>
 #include <cstdlib>
+#include <algorithm>
+
+template<typename L, typename I>
+void printTheList(L list, I iter) {
+    for (iter = list.begin();
+         iter != list.end();
+         iter++) {
+        std::cout << *iter << " ";
+    }
+    std::cout << std::endl;
+}
+
 template <typename Object>
 class DoublyLinkedList {
   private:
@@ -81,6 +94,12 @@ class DoublyLinkedList {
     };
 
   public:
+    friend void swap(DoublyLinkedList& first, DoublyLinkedList& second) {
+        using std::swap;
+        swap(first.head, second.head);
+        swap(first.tail, second.tail);
+        swap(first.sz, second.sz);
+    }
     DoublyLinkedList() {init();}
     ~DoublyLinkedList() {
         clear();
@@ -89,15 +108,13 @@ class DoublyLinkedList {
     }
     DoublyLinkedList(const DoublyLinkedList &rhs) {
         init();
-        *this = rhs;
-    }
-    const DoublyLinkedList& operator= (const DoublyLinkedList &rhs) {
-        if (this == &rhs)
-            return *this;
-        clear();
-        for (const_iterator iter = rhs.begin(); iter != rhs.end();  ++iter) {
+        for (const_iterator iter = rhs.begin(); iter != rhs.end(); ++iter) {
             push_back(*iter);
         }
+    }
+    DoublyLinkedList& operator= (const DoublyLinkedList &rhs) {
+        DoublyLinkedList tmp(rhs);
+        swap(*this, tmp);
         return *this;
     }
     iterator begin() {return iterator(head->next);}
@@ -154,7 +171,7 @@ class DoublyLinkedList {
     // watch out.
     int sz;
     Node *head;
-v    Node *tail;
+    Node *tail;
     void init() {
         sz = 0;
         head = new Node();
